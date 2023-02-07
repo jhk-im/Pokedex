@@ -46,8 +46,8 @@ class PokemonNetwork {
                     throw URLError(.unknown)
                 }
             }
-            .decode(type: PokemonListResponse.self, decoder: JSONDecoder())
-            .map { $0.data }
+            .decode(type: PokemonList.self, decoder: JSONDecoder())
+            .map { $0 }
             .mapError { $0 as? URLError ?? URLError(.unknown) }
             .eraseToAnyPublisher()
     }
@@ -82,8 +82,8 @@ class PokemonNetwork {
                     throw URLError(.unknown)
                 }
             }
-            .decode(type: PokemonResponse.self, decoder: JSONDecoder())
-            .map { $0.data }
+            .decode(type: Pokemon.self, decoder: JSONDecoder())
+            .map { $0 }
             .mapError { $0 as? URLError ?? URLError(.unknown) }
             .eraseToAnyPublisher()
     }

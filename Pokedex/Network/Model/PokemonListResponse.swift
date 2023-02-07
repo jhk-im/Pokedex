@@ -7,18 +7,14 @@
 
 import Foundation
 
-
-struct PokemonListResponse: Decodable {
-    let data: PokemonList
-}
-
-struct PokemonList: Hashable, Decodable {
+struct PokemonList: Codable {
     let count : Int?
     let next : String?
     let previous : String?
     let results : [Results]?
 
     enum CodingKeys: String, CodingKey {
+
         case count = "count"
         case next = "next"
         case previous = "previous"
@@ -34,11 +30,12 @@ struct PokemonList: Hashable, Decodable {
     }
 }
 
-struct Results : Hashable, Decodable {
+struct Results : Codable {
     let name : String?
     let url : String?
 
     enum CodingKeys: String, CodingKey {
+
         case name = "name"
         case url = "url"
     }
@@ -47,5 +44,11 @@ struct Results : Hashable, Decodable {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decodeIfPresent(String.self, forKey: .name)
         url = try values.decodeIfPresent(String.self, forKey: .url)
+    }
+    
+    func getImageUrl() -> String {
+        var indexString = url?.replacingOccurrences(of: "https://pokeapi.co/api/v2/pokemon/", with: "")
+        var idx = indexString?.replacingOccurrences(of: "/", with: "") ?? ""
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(idx).png"
     }
 }

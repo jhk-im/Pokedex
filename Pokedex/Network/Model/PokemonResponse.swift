@@ -7,11 +7,7 @@
 
 import Foundation
 
-struct PokemonResponse: Decodable {
-    let data: Pokemon
-}
-
-struct Pokemon: Hashable, Decodable {
+struct Pokemon : Codable {
     let id : Int?
     let name : String?
     let height : Int?
@@ -42,7 +38,7 @@ struct Pokemon: Hashable, Decodable {
     }
 }
 
-struct Types : Hashable, Decodable {
+struct Types : Codable {
     let slot : Int?
     let type : Type?
 
@@ -58,7 +54,7 @@ struct Types : Hashable, Decodable {
     }
 }
 
-struct Type : Hashable, Decodable {
+struct Type : Codable {
     let name : String?
     let url : String?
 
@@ -74,7 +70,7 @@ struct Type : Hashable, Decodable {
     }
 }
 
-struct Stats : Hashable, Decodable {
+struct Stats : Codable {
     let base_stat : Int?
     let effort : Int?
     let stat : Stat?
@@ -93,7 +89,7 @@ struct Stats : Hashable, Decodable {
     }
 }
 
-struct Stat : Hashable, Decodable {
+struct Stat : Codable {
     let name : String?
     let url : String?
 
