@@ -10,32 +10,15 @@ import Combine
 
 class PokemonListViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
-    
-    @Published var mOffset = 0
-    @Published var mLimit = 10
-    @Published var mPokemonList: PokemonList? = nil
+    private var mOffset = 0
+    private let mLimit = 10
+    @Published var results = [Results]()
     
 //    @Published var mId = 1
 //    @Published var mPokemon: Pokemon? = nil
     
-    init(pokemonNetwork : PokemonNetwork = PokemonNetwork()) {
-        
-        // MARK: - pokemonList
-        pokemonNetwork.getPokemonList(offset: mOffset, limit: mLimit)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] in
-                    guard case .failure(let error) = $0 else { return }
-                    print("getPokemonList error -> \(error)")
-                    self?.mPokemonList = nil
-                },
-                receiveValue: { [weak self] pokemonList in
-                    print("getPokemonList success -> \(pokemonList)")
-                    self?.mPokemonList = pokemonList
-                }
-            )
-            .store(in: &cancellables)
-            
+    init() {
+        getPokemonList(isFirst: true)
         // MARK: - pokemonDetail
 //        pokemonNetwork.getPokemonDetail(id: 1)
 //            .receive(on: DispatchQueue.main)
@@ -52,5 +35,29 @@ class PokemonListViewModel: ObservableObject {
 //                }
 //            )
 //            .store(in: &cancellables)
+    }
+    
+    // MARK: - pokemonList
+    func getPokemonList(isFirst: Bool) {
+        
+        if !isFirst {
+            mOffset += mLimit
+        }
+        PokemonNetwork().getPokemonList(offset: mOffset, limit: mLimit)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] in
+                    guard case .failure(let error) = $0 else { return }
+                    print("getPokemonList error -> \(error)")
+                    self?.results = [Results]()
+                },
+                receiveValue: { [weak self] pokemonList in
+                    print("getPokemonList success -> \(pokemonList)")
+                    if let res = pokemonList.results {
+                        self?.results += res
+                    }
+                }
+            )
+            .store(in: &cancellables)
     }
 }

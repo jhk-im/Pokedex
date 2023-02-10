@@ -10,7 +10,7 @@ import SwiftUI
 struct PokemonListItem: View {
     var name: String
     var imageUrl: String
-    
+    var isLast = false
     
     var body: some View {
         HStack {

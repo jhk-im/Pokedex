@@ -11,13 +11,17 @@ struct PokemonListView: View {
     @ObservedObject var viewModel = PokemonListViewModel()
     
     var body: some View {
-        List(viewModel.mPokemonList?.results ?? [], id: \.name) { result in
+        List(viewModel.results, id: \.name) { result in
             PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
+                .onAppear {
+                    if viewModel.results.last?.name == result.name {
+                        print("zzz")
+                        viewModel.getPokemonList(isFirst: false)
+                    }
+                }
         }
-    }
-    
-    func test() {
-        
+        .listStyle(PlainListStyle())
+        .navigationTitle("Pokemon")
     }
 }
 

@@ -47,8 +47,8 @@ struct Results : Codable {
     }
     
     func getImageUrl() -> String {
-        var indexString = url?.replacingOccurrences(of: "https://pokeapi.co/api/v2/pokemon/", with: "")
-        var idx = indexString?.replacingOccurrences(of: "/", with: "") ?? ""
+        let indexString = url?.replacingOccurrences(of: "https://pokeapi.co/api/v2/pokemon/", with: "")
+        let idx = indexString?.replacingOccurrences(of: "/", with: "") ?? ""
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/\(idx).png"
     }
 }
