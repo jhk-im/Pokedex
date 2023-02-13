@@ -13,40 +13,42 @@ struct PokemonListView: View {
     @ObservedObject var viewModel = PokemonListViewModel()
     
     @State private var isShowingDetail = false
-    @State private var selectedResult: Results?
+    @State private var selectedResult: Results? = nil
     
     @Namespace var animation
+    @State private var isSetList = false
     
     var body: some View {
         NavigationView {
             ZStack {
                 
-                if let selectedResult = selectedResult, isShowingDetail {
+                List(viewModel.results, id: \.name) { result in
+                    PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
+                        .onAppear {
+                            if viewModel.results.last?.name == result.name {
+                                print("getPokemonList() -> last item")
+                                viewModel.getPokemonList(isFirst: false)
+                            }
+                        }
+                        .matchedGeometryEffect(id: result.name, in: animation)
+                        .onTapGesture {
+                            selectedResult = result
+                            isShowingDetail = true
+                        }
+                }
+                .listStyle(PlainListStyle())
+                
+                
+                ActivityIndicatorView(isVisible: $viewModel.isLoading, type: .default())
+                    .frame(width: 50.0, height: 50.0)
+                    .foregroundColor(.red)
+                
+                if selectedResult != nil && isShowingDetail {
                     DetailView(
                         isShowingDetail: $isShowingDetail,
-                        item: selectedResult,
+                        selectedResult: $selectedResult,
                         animation: animation
                     )
-                } else {
-                    List(viewModel.results, id: \.name) { result in
-                        PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
-                            .onAppear {
-                                if viewModel.results.last?.name == result.name {
-                                    print("getPokemonList() -> last item")
-                                    viewModel.getPokemonList(isFirst: false)
-                                }
-                            }
-                            .matchedGeometryEffect(id: result.name, in: animation)
-                            .onTapGesture {
-                                selectedResult = result
-                                isShowingDetail = true
-                            }
-                    }
-                    .listStyle(PlainListStyle())
-                    
-                    ActivityIndicatorView(isVisible: $viewModel.isLoading, type: .default())
-                        .frame(width: 50.0, height: 50.0)
-                        .foregroundColor(.red)
                 }
             }
         }
@@ -57,29 +59,21 @@ struct PokemonListView: View {
 
 struct DetailView: View {
   @Binding var isShowingDetail: Bool
-  let item: Results
+  @Binding var selectedResult: Results?
   let animation: Namespace.ID
   var body: some View {
       VStack {
-          AsyncImage(url: URL(string: item.getImageUrl()), scale: 50) { phase in
-              if let image = phase.image {
-                  image
-                      .resizable()
-                      .scaledToFit()
-              } else if phase.error != nil {
-                  Color.gray // Indicates an error.
-              } else {
-                  // Acts as a placeholder.
-              }
+          if let item = selectedResult, isShowingDetail {
+              PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl())
+                  .matchedGeometryEffect(id: item.name, in: animation)
+                  .onTapGesture {
+                      selectedResult = nil
+                      isShowingDetail = false
+                  }
           }
-          .frame(width: 100, height: 100)
-          .matchedGeometryEffect(id: item.name, in: animation)
-          .onTapGesture {
-                isShowingDetail = false
-          }
+          Spacer()
       }
-      .padding(.horizontal)
-      .navigationBarTitleDisplayMode(.inline)
+      .background(Color.white)
       .navigationViewStyle(.stack)
   }
 }
