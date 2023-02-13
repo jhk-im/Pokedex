@@ -26,6 +26,7 @@
 		B1AFAA8D296AC29000C517BE /* PokedexUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFAA8C296AC29000C517BE /* PokedexUITests.swift */; };
 		B1AFAA8F296AC29000C517BE /* PokedexUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AFAA8E296AC29000C517BE /* PokedexUITestsLaunchTests.swift */; };
 		B1C1B59529792CAE00593881 /* PokemonListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C1B59429792CAE00593881 /* PokemonListResponse.swift */; };
+		B1C51245299A074300348847 /* ActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = B1C51244299A074300348847 /* ActivityIndicatorView */; };
 		B1F59A5C29923183009F87CD /* PokemonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1F59A5B29923183009F87CD /* PokemonListItem.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1C51245299A074300348847 /* ActivityIndicatorView in Frameworks */,
 				B1048D782976DEDD006E5097 /* PopupView in Frameworks */,
 				B1048D712976DDEF006E5097 /* Collections in Frameworks */,
 				B1048D732976DDEF006E5097 /* DequeModule in Frameworks */,
@@ -245,6 +247,7 @@
 				B1048D722976DDEF006E5097 /* DequeModule */,
 				B1048D742976DDEF006E5097 /* OrderedCollections */,
 				B1048D772976DEDD006E5097 /* PopupView */,
+				B1C51244299A074300348847 /* ActivityIndicatorView */,
 			);
 			productName = Pokedex;
 			productReference = B1AFAA69296AC29000C517BE /* Pokedex.app */;
@@ -321,6 +324,7 @@
 			packageReferences = (
 				B1048D6F2976DDEF006E5097 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				B1048D762976DEDD006E5097 /* XCRemoteSwiftPackageReference "PopupView" */,
+				B1C51243299A074300348847 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
 			);
 			productRefGroup = B1AFAA6A296AC29000C517BE /* Products */;
 			projectDirPath = "";
@@ -721,6 +725,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		B1C51243299A074300348847 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -743,6 +755,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B1048D762976DEDD006E5097 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		B1C51244299A074300348847 /* ActivityIndicatorView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B1C51243299A074300348847 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */;
+			productName = ActivityIndicatorView;
 		};
 /* End XCSwiftPackageProductDependency section */
 

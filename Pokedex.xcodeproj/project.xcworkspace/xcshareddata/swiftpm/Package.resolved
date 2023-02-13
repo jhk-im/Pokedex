@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "activityindicatorview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/exyte/ActivityIndicatorView.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b90e88d4e9b17aa391e101384f461543dcae8c45"
+      }
+    },
+    {
       "identity" : "popupview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/exyte/PopupView.git",

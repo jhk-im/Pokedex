@@ -21,10 +21,11 @@ struct PokemonListItem: View {
                         .scaledToFit()
                 } else if phase.error != nil {
                     Color.gray // Indicates an error.
+                } else {
+                    // Acts as a placeholder.
                 }
             }
             .frame(width: 100, height: 100)
-            
                     
             Text(name)
             Spacer()
