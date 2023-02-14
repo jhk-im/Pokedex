@@ -12,7 +12,7 @@ class PokemonListViewModel: ObservableObject {
     private var pokemonNetwork = PokemonNetwork()
     private var cancellables = Set<AnyCancellable>()
     private var mOffset = 0
-    private let mLimit = 10
+    private let mLimit = 20
     @Published var results = [Results]()
     @Published var isLoading = false
     

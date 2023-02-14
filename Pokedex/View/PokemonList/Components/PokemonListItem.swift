@@ -11,25 +11,41 @@ struct PokemonListItem: View {
     var name: String
     var imageUrl: String
     var isLast = false
+    var isList = true
     
     var body: some View {
-        HStack {
-            AsyncImage(url: URL(string: imageUrl), scale: 50) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } else if phase.error != nil {
-                    Color.gray // Indicates an error.
-                } else {
-                    // Acts as a placeholder.
-                }
+//        HStack {
+//            AsyncImage(url: URL(string: imageUrl), scale: 50) { phase in
+//                if let image = phase.image {
+//                    image
+//                        .resizable()
+//                        .scaledToFit()
+//                } else if phase.error != nil {
+//                    Color.gray // Indicates an error.
+//                } else {
+//                    // Acts as a placeholder.
+//                }
+//            }
+//            .frame(width: 100, height: 100)
+//
+//            Text(name)
+//            Spacer()
+//        }
+        AsyncImage(url: URL(string: imageUrl), scale: 50) { phase in
+            if let image = phase.image {
+                image
+                    .resizable()
+                    .scaledToFit()
+            } else if phase.error != nil {
+                Color.gray // Indicates an error.
+            } else {
+                // Acts as a placeholder.
             }
-            .frame(width: 100, height: 100)
-                    
-            Text(name)
-            Spacer()
         }
+        .frame(width: 100, height: 100)
+        .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
+        .background(.blue)
+        .cornerRadius(12)
     }
 }
 
