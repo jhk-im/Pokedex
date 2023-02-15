@@ -14,7 +14,9 @@ struct PokemonListView: View {
     
     @State private var isShowingDetail = false
     @State private var selectedResult: Results? = nil
+    
     @State private var scrollViewHeight:CGFloat = 0.0
+    @State private var gridViewHeight:CGFloat = 0.0
     
     @Namespace private var animation
     
@@ -25,10 +27,12 @@ struct PokemonListView: View {
             ZStack {
                 ScrollView {
                     GeometryReader { proxy -> Text in
+//                        print("scrollViewHeight1 -> \(proxy.frame(in: .global).minY)")
+//                        print("scrollViewHeight2 -> \(scrollViewHeight)")
                         if !viewModel.isLoading &&  proxy.frame(in: .global).minY < scrollViewHeight {
-                            scrollViewHeight += scrollViewHeight
-//                            print("scrollViewHeight2 -> \(proxy.frame(in: .global).minY)")
-//                            print("scrollViewHeight3 -> \(scrollViewHeight)")
+                            scrollViewHeight += gridViewHeight
+//                            print("scrollViewHeight3 -> \(proxy.frame(in: .global).minY)")
+//                            print("scrollViewHeight4 -> \(scrollViewHeight)")
                             DispatchQueue.main.async {
                                 viewModel.getPokemonList(isFirst: false)
                                 
@@ -44,6 +48,16 @@ struct PokemonListView: View {
                                     isShowingDetail = true
                                     selectedResult = result
                                 }
+                                .background(
+                                    GeometryReader { proxy in
+                                        Color.clear.onAppear {
+                                            if gridViewHeight == 0 {
+                                                gridViewHeight = -proxy.frame(in: .global).height * 10
+                                                //print(" scrollViewHeight!!!-> \(gridViewHeight)")
+                                            }
+                                        }
+                                    }
+                                )
                         }
                     })
                 }
@@ -51,7 +65,7 @@ struct PokemonListView: View {
                     GeometryReader { proxy in
                         Color.clear.onAppear {
                             self.scrollViewHeight = -proxy.frame(in: .global).size.height
-//                            print("scrollViewHeight1 -> \(scrollViewHeight)")
+                            //print("scrollViewHeight6 -> \(scrollViewHeight)")
                         }
                     }
                 )
@@ -70,7 +84,7 @@ struct PokemonListView: View {
                 }
             }
             //.navigationTitle("Pokedex")
-            .animation(.easeIn(duration: 0.2), value: isShowingDetail)
+            .animation(.easeIn(duration: 0.3), value: isShowingDetail)
         }
     }
 }
