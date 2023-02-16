@@ -12,6 +12,7 @@ struct PokemonListView: View {
     
     @ObservedObject var viewModel = PokemonListViewModel()
     
+    @State private var isNavigationBarHidden = false
     @State private var isShowingDetail = false
     @State private var selectedResult: Results? = nil
     
@@ -45,6 +46,7 @@ struct PokemonListView: View {
                             PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
                                 .matchedGeometryEffect(id: result.name, in: animation, isSource: true)
                                 .onTapGesture {
+                                    isNavigationBarHidden = true
                                     isShowingDetail = true
                                     selectedResult = result
                                 }
@@ -75,42 +77,18 @@ struct PokemonListView: View {
                     .foregroundColor(.red)
                 
                 if selectedResult != nil {
-                    DetailView(
+                    PokemonDetailView(
+                        isNavigationBarHidden: $isNavigationBarHidden,
                         isShowingDetail: $isShowingDetail,
                         selectedResult: $selectedResult,
                         animation: animation
                     )
-                    
                 }
             }
-            //.navigationTitle("Pokedex")
+            .navigationTitle("Pokedex")
+            .navigationBarHidden(isNavigationBarHidden)
             .animation(.easeIn(duration: 0.3), value: isShowingDetail)
         }
-    }
-}
-
-struct DetailView: View {
-    @Binding var isShowingDetail: Bool
-    @Binding var selectedResult: Results?
-    let animation: Namespace.ID
-    var body: some View {
-        VStack(alignment: .center) {
-            Spacer()
-            if let item = selectedResult {
-                HStack {
-                    Spacer()
-                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), isList: false)
-                        .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
-                        .onTapGesture {
-                            isShowingDetail = false
-                            selectedResult = nil
-                        }
-                    Spacer()
-                }
-            }
-            Spacer()
-        }
-        .background(Color.white)
     }
 }
 
