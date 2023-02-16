@@ -10,8 +10,8 @@ import SwiftUI
 struct PokemonListItem: View {
     var name: String
     var imageUrl: String
-    var isLast = false
-    var isList = true
+    var isDetail = false
+    var backgroundColor: Color = .blue
     
     var body: some View {
 //        HStack {
@@ -45,7 +45,7 @@ struct PokemonListItem: View {
             }
             .frame(width: 100, height: 100)
             .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-            .background(.blue)
+            .background(backgroundColor)
             .cornerRadius(12)
         }
     }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PokemonDetailView: View {
-    @Binding var isNavigationBarHidden: Bool
     @Binding var isShowingDetail: Bool
     @Binding var selectedResult: Results?
     let animation: Namespace.ID
@@ -19,15 +18,14 @@ struct PokemonDetailView: View {
                 Spacer()
             }
             .frame(height: 100)
-            .background(.blue)
+            .background(.red)
             
             if let item = selectedResult {
                 HStack {
                     Spacer()
-                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), isList: false)
+                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), backgroundColor: .red)
                         .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
                         .onTapGesture {
-                            isNavigationBarHidden = false
                             isShowingDetail = false
                             selectedResult = nil
                         }

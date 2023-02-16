@@ -12,7 +12,7 @@ struct PokemonListView: View {
     
     @ObservedObject var viewModel = PokemonListViewModel()
     
-    @State private var isNavigationBarHidden = false
+    @State private var isNavigationBarVisible = false
     @State private var isShowingDetail = false
     @State private var selectedResult: Results? = nil
     
@@ -26,51 +26,65 @@ struct PokemonListView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                ScrollView {
-                    GeometryReader { proxy -> Text in
-//                        print("scrollViewHeight1 -> \(proxy.frame(in: .global).minY)")
-//                        print("scrollViewHeight2 -> \(scrollViewHeight)")
-                        if !viewModel.isLoading &&  proxy.frame(in: .global).minY < scrollViewHeight {
-                            scrollViewHeight += gridViewHeight
-//                            print("scrollViewHeight3 -> \(proxy.frame(in: .global).minY)")
-//                            print("scrollViewHeight4 -> \(scrollViewHeight)")
-                            DispatchQueue.main.async {
-                                viewModel.getPokemonList(isFirst: false)
-                                
-                            }
-                        }
-                        return Text("")
+                VStack {
+                    HStack{
+                        Spacer()
+                        Text("Pokedex")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(isNavigationBarVisible ? .white : .black)
+                        Spacer()
                     }
-                    LazyVGrid(columns: columns, content: {
-                        ForEach(viewModel.results, id: \.name) { result in
-                            PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
-                                .matchedGeometryEffect(id: result.name, in: animation, isSource: true)
-                                .onTapGesture {
-                                    isNavigationBarHidden = true
-                                    isShowingDetail = true
-                                    selectedResult = result
+                    .frame(height: 60)
+                    .background(isNavigationBarVisible ? .blue : .white)
+                    
+                    ScrollView {
+                        GeometryReader { proxy -> Text in
+                            //print("scrollViewHeight1 -> \(proxy.frame(in: .global).minY)")
+//                            print("scrollViewHeight2 -> \(scrollViewHeight)")
+                            
+                            isNavigationBarVisible = proxy.frame(in: .global).minY < 125.0
+                            
+                            if !viewModel.isLoading &&  proxy.frame(in: .global).minY < scrollViewHeight {
+                                scrollViewHeight += gridViewHeight
+    //                            print("scrollViewHeight3 -> \(proxy.frame(in: .global).minY)")
+    //                            print("scrollViewHeight4 -> \(scrollViewHeight)")
+                                DispatchQueue.main.async {
+                                    viewModel.getPokemonList(isFirst: false)
+                                    
                                 }
-                                .background(
-                                    GeometryReader { proxy in
-                                        Color.clear.onAppear {
-                                            if gridViewHeight == 0 {
-                                                gridViewHeight = -proxy.frame(in: .global).height * 10
-                                                //print(" scrollViewHeight!!!-> \(gridViewHeight)")
+                            }
+                            return Text("")
+                        }
+                        LazyVGrid(columns: columns, content: {
+                            ForEach(viewModel.results, id: \.name) { result in
+                                PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
+                                    .matchedGeometryEffect(id: result.name, in: animation, isSource: true)
+                                    .onTapGesture {
+                                        isShowingDetail = true
+                                        selectedResult = result
+                                    }
+                                    .background(
+                                        GeometryReader { proxy in
+                                            Color.clear.onAppear {
+                                                if gridViewHeight == 0 {
+                                                    gridViewHeight = -proxy.frame(in: .global).height * 10
+                                                    //print(" scrollViewHeight!!!-> \(gridViewHeight)")
+                                                }
                                             }
                                         }
-                                    }
-                                )
-                        }
-                    })
-                }
-                .background(
-                    GeometryReader { proxy in
-                        Color.clear.onAppear {
-                            self.scrollViewHeight = -proxy.frame(in: .global).size.height
-                            //print("scrollViewHeight6 -> \(scrollViewHeight)")
-                        }
+                                    )
+                            }
+                        })
                     }
-                )
+                    .background(
+                        GeometryReader { proxy in
+                            Color.clear.onAppear {
+                                self.scrollViewHeight = -proxy.frame(in: .global).size.height
+                                //print("scrollViewHeight6 -> \(scrollViewHeight)")
+                            }
+                        }
+                    )
+                }
                 
                 ActivityIndicatorView(isVisible: $viewModel.isLoading, type: .default())
                     .frame(width: 50.0, height: 50.0)
@@ -78,15 +92,14 @@ struct PokemonListView: View {
                 
                 if selectedResult != nil {
                     PokemonDetailView(
-                        isNavigationBarHidden: $isNavigationBarHidden,
                         isShowingDetail: $isShowingDetail,
                         selectedResult: $selectedResult,
                         animation: animation
                     )
                 }
             }
-            .navigationTitle("Pokedex")
-            .navigationBarHidden(isNavigationBarHidden)
+//            .navigationTitle("Pokedex")
+//            .navigationBarHidden(isNavigationBarHidden)
             .animation(.easeIn(duration: 0.3), value: isShowingDetail)
         }
     }
