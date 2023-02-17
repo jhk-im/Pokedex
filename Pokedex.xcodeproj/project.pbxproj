@@ -13,6 +13,8 @@
 		B1048D782976DEDD006E5097 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = B1048D772976DEDD006E5097 /* PopupView */; };
 		B1048D7B2976DF30006E5097 /* PokedexConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1048D7A2976DF30006E5097 /* PokedexConfig.swift */; };
 		B130C5AF299DC19D00C1D525 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B130C5AE299DC19D00C1D525 /* PokemonDetailView.swift */; };
+		B1537FB5299E293F0054282E /* Palette in Frameworks */ = {isa = PBXBuildFile; productRef = B1537FB4299E293F0054282E /* Palette */; };
+		B1537FB7299E29680054282E /* PokemonDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1537FB6299E29680054282E /* PokemonDetailViewModel.swift */; };
 		B16D5CBC2979313400B04D08 /* PokemonAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16D5CBB2979313400B04D08 /* PokemonAPI.swift */; };
 		B16D5CBF2979334200B04D08 /* PokemonNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16D5CBE2979334200B04D08 /* PokemonNetwork.swift */; };
 		B16D5CC12979348D00B04D08 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B16D5CC02979348D00B04D08 /* NetworkManager.swift */; };
@@ -55,6 +57,7 @@
 		B1048D7D2976DFA4006E5097 /* PokedexConfig.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = PokedexConfig.release.xcconfig; sourceTree = "<group>"; };
 		B1048D7E2976E23C006E5097 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B130C5AE299DC19D00C1D525 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
+		B1537FB6299E29680054282E /* PokemonDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailViewModel.swift; sourceTree = "<group>"; };
 		B16D5CBB2979313400B04D08 /* PokemonAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonAPI.swift; sourceTree = "<group>"; };
 		B16D5CBE2979334200B04D08 /* PokemonNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonNetwork.swift; sourceTree = "<group>"; };
 		B16D5CC02979348D00B04D08 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -81,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1537FB5299E293F0054282E /* Palette in Frameworks */,
 				B1C51245299A074300348847 /* ActivityIndicatorView in Frameworks */,
 				B1048D782976DEDD006E5097 /* PopupView in Frameworks */,
 				B1048D712976DDEF006E5097 /* Collections in Frameworks */,
@@ -228,6 +232,7 @@
 				B187400B2992207000511044 /* PokemonListView.swift */,
 				B187400D2992210D00511044 /* PokemonListViewModel.swift */,
 				B130C5AE299DC19D00C1D525 /* PokemonDetailView.swift */,
+				B1537FB6299E29680054282E /* PokemonDetailViewModel.swift */,
 			);
 			path = PokemonList;
 			sourceTree = "<group>";
@@ -262,6 +267,7 @@
 				B1048D742976DDEF006E5097 /* OrderedCollections */,
 				B1048D772976DEDD006E5097 /* PopupView */,
 				B1C51244299A074300348847 /* ActivityIndicatorView */,
+				B1537FB4299E293F0054282E /* Palette */,
 			);
 			productName = Pokedex;
 			productReference = B1AFAA69296AC29000C517BE /* Pokedex.app */;
@@ -339,6 +345,7 @@
 				B1048D6F2976DDEF006E5097 /* XCRemoteSwiftPackageReference "swift-collections" */,
 				B1048D762976DEDD006E5097 /* XCRemoteSwiftPackageReference "PopupView" */,
 				B1C51243299A074300348847 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */,
+				B1537FB3299E293F0054282E /* XCRemoteSwiftPackageReference "Palette-iOS" */,
 			);
 			productRefGroup = B1AFAA6A296AC29000C517BE /* Products */;
 			projectDirPath = "";
@@ -393,6 +400,7 @@
 				B1F59A5C29923183009F87CD /* PokemonListItem.swift in Sources */,
 				B16D5CBC2979313400B04D08 /* PokemonAPI.swift in Sources */,
 				B187400C2992207000511044 /* PokemonListView.swift in Sources */,
+				B1537FB7299E29680054282E /* PokemonDetailViewModel.swift in Sources */,
 				B187400E2992210D00511044 /* PokemonListViewModel.swift in Sources */,
 				B1AFAA6D296AC29000C517BE /* PokedexApp.swift in Sources */,
 			);
@@ -741,6 +749,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		B1537FB3299E293F0054282E /* XCRemoteSwiftPackageReference "Palette-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Charlisim/Palette-iOS.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		B1C51243299A074300348847 /* XCRemoteSwiftPackageReference "ActivityIndicatorView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/exyte/ActivityIndicatorView.git";
@@ -771,6 +787,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B1048D762976DEDD006E5097 /* XCRemoteSwiftPackageReference "PopupView" */;
 			productName = PopupView;
+		};
+		B1537FB4299E293F0054282E /* Palette */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B1537FB3299E293F0054282E /* XCRemoteSwiftPackageReference "Palette-iOS" */;
+			productName = Palette;
 		};
 		B1C51244299A074300348847 /* ActivityIndicatorView */ = {
 			isa = XCSwiftPackageProductDependency;

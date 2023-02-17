@@ -46,6 +46,11 @@ struct Results : Codable {
         url = try values.decodeIfPresent(String.self, forKey: .url)
     }
     
+    func getIndexString() -> String {
+        let indexString = url?.replacingOccurrences(of: "https://pokeapi.co/api/v2/pokemon/", with: "")
+        return indexString?.replacingOccurrences(of: "/", with: "") ?? ""
+    }
+    
     func getImageUrl() -> String {
         let indexString = url?.replacingOccurrences(of: "https://pokeapi.co/api/v2/pokemon/", with: "")
         let idx = indexString?.replacingOccurrences(of: "/", with: "") ?? ""

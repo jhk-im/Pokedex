@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "palette-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Charlisim/Palette-iOS.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "007df1261de4ed0989ae0a40be353a8c69b694cb"
+      }
+    },
+    {
       "identity" : "popupview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/exyte/PopupView.git",

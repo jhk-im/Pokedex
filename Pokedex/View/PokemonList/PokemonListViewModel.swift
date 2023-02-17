@@ -16,27 +16,8 @@ class PokemonListViewModel: ObservableObject {
     @Published var results = [Results]()
     @Published var isLoading = false
     
-//    @Published var mId = 1
-//    @Published var mPokemon: Pokemon? = nil
-    
     init() {
         getPokemonList(isFirst: true)
-        // MARK: - pokemonDetail
-//        pokemonNetwork.getPokemonDetail(id: 1)
-//            .receive(on: DispatchQueue.main)
-//            .sink(
-//                receiveCompletion: { [weak self] in
-//                    guard case .failure(let error) = $0 else { return }
-//                    print("getPokemonDetail error -> \(error)")
-//                    self?.mPokemonList = nil
-//                },
-//                receiveValue: { [weak self] pokemon in
-//                    print("getPokemonDetail success -> \(pokemon)")
-//                    self?.mPokemon = pokemon
-//
-//                }
-//            )
-//            .store(in: &cancellables)
     }
     
     // MARK: - pokemonList
