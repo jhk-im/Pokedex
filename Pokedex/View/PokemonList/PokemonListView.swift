@@ -31,11 +31,11 @@ struct PokemonListView: View {
                         Spacer()
                         Text("Pokedex")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(isNavigationBarVisible ? .white : .black)
+                            //.foregroundColor(isNavigationBarVisible ? .white : .black)
                         Spacer()
                     }
                     .frame(height: 60)
-                    .background(isNavigationBarVisible ? .blue : .white)
+                    //.background(isNavigationBarVisible ? .blue : .white)
                     
                     ScrollView {
                         GeometryReader { proxy -> Text in
@@ -98,6 +98,7 @@ struct PokemonListView: View {
                     )
                 }
             }
+
 //            .navigationTitle("Pokedex")
 //            .navigationBarHidden(isNavigationBarHidden)
             .animation(.easeIn(duration: 0.3), value: isShowingDetail)
