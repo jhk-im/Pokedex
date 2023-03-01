@@ -31,11 +31,10 @@ struct PokemonListView: View {
                         Spacer()
                         Text("Pokedex")
                             .font(.system(size: 24, weight: .bold))
-                            //.foregroundColor(isNavigationBarVisible ? .white : .black)
                         Spacer()
                     }
                     .frame(height: 60)
-                    //.background(isNavigationBarVisible ? .blue : .white)
+                    
                     
                     ScrollView {
                         GeometryReader { proxy -> Text in
@@ -57,7 +56,9 @@ struct PokemonListView: View {
                         }
                         LazyVGrid(columns: columns, content: {
                             ForEach(viewModel.results, id: \.name) { result in
-                                PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl())
+                                PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl()) { color in
+                                    
+                                }
                                     .matchedGeometryEffect(id: result.name, in: animation, isSource: true)
                                     .onTapGesture {
                                         isShowingDetail = true
@@ -98,9 +99,6 @@ struct PokemonListView: View {
                     )
                 }
             }
-
-//            .navigationTitle("Pokedex")
-//            .navigationBarHidden(isNavigationBarHidden)
             .animation(.easeIn(duration: 0.3), value: isShowingDetail)
         }
     }

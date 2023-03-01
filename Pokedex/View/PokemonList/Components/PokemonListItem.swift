@@ -13,6 +13,7 @@ struct PokemonListItem: View {
     var imageUrl: String
     var isDetail = false
     @State var backgroundColor: Color = .clear
+    var handler: (Color) -> Void
     
     var body: some View {
         VStack {
@@ -34,18 +35,13 @@ struct PokemonListItem: View {
             .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
             .background(backgroundColor)
             .cornerRadius(12)
-            .onAppear {
-                //setAverageColor()
-                //print("\(pallete?.getContrastingColor())")
-            }
         }
     }
     
     private func setAverageColor(image: Image) {
-        //print("image -> \(image)")
         let uiColor = image.asUIImage().averageColor ?? .clear
         backgroundColor = Color(uiColor)
-        //print("backgroundColor -> \(backgroundColor)")
+        handler(backgroundColor)
     }
 }
 
@@ -100,18 +96,20 @@ extension UIImage {
         
         print("bitmap -> \(bitmap)")
         
+        let target: UInt8 = 10
+        
         if bitmap[0] <= bitmap[1] && bitmap[0] <= bitmap[2] {
-            red = CGFloat(bitmap[0] - 12)
-            green = CGFloat(bitmap[1])
-            blue = CGFloat(bitmap[2])
+            red = CGFloat(bitmap[0] - target)
+            green = bitmap[0] == bitmap[1] ? CGFloat(bitmap[1] - target) : CGFloat(bitmap[1])
+            blue = bitmap[0] == bitmap[2] ? CGFloat(bitmap[2] - target) : CGFloat(bitmap[2])
         } else if bitmap[1] <= bitmap[0] && bitmap[1] <= bitmap[2] {
-            red = CGFloat(bitmap[0])
-            green = CGFloat(bitmap[1] - 12)
-            blue = CGFloat(bitmap[2])
+            red = bitmap[1] == bitmap[0] ? CGFloat(bitmap[0] - target) : CGFloat(bitmap[0])
+            green = CGFloat(bitmap[1] - target)
+            blue = bitmap[1] == bitmap[2] ? CGFloat(bitmap[2] - target) : CGFloat(bitmap[2])
         } else {
-            red = CGFloat(bitmap[0])
-            green = CGFloat(bitmap[1])
-            blue = CGFloat(bitmap[2] - 12)
+            red = bitmap[2] == bitmap[0] ? CGFloat(bitmap[0] - target) : CGFloat(bitmap[0])
+            green = bitmap[2] == bitmap[1] ? CGFloat(bitmap[1] - target) : CGFloat(bitmap[1])
+            blue = CGFloat(bitmap[2] - target)
         }
         
         return UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: 1)
@@ -120,6 +118,8 @@ extension UIImage {
 
 struct PokemonListItem_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListItem(name: "bulbasaur", imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png")
+        PokemonListItem(name: "bulbasaur", imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png") { color in
+            
+        }
     }
 }

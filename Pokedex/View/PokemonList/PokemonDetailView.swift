@@ -10,6 +10,7 @@ import SwiftUI
 struct PokemonDetailView: View {
     @Binding var isShowingDetail: Bool
     @Binding var selectedResult: Results?
+    @State var backgroundColor: Color = .clear
     let animation: Namespace.ID
     
     @ObservedObject var viewModel = PokemonDetailViewModel()
@@ -21,17 +22,20 @@ struct PokemonDetailView: View {
                 Spacer()
             }
             .frame(height: 100)
-            .background(.blue)
+            .background(backgroundColor)
             
             if let item = selectedResult {
                 HStack {
                     Spacer()
-                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), backgroundColor: .blue)
+                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl()) { color in
+                        backgroundColor = color
+                    }
                         .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
                         .onTapGesture {
                             isShowingDetail = false
                             selectedResult = nil
                         }
+                        
                     Spacer()
                 }
                 .onAppear {
