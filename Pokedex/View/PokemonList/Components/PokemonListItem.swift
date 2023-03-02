@@ -13,29 +13,37 @@ struct PokemonListItem: View {
     var imageUrl: String
     var isDetail = false
     @State var backgroundColor: Color = .clear
+    @State var width: CGFloat = 120
+    @State var height: CGFloat = 120
     var handler: (Color) -> Void
     
     var body: some View {
-        VStack {
-            AsyncImage(url: URL(string: imageUrl), scale: 50) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .onAppear {
-                            setAverageColor(image: image)
-                        }
-                } else if phase.error != nil {
-                    Color.gray // Indicates an error.
-                } else {
-                    // Acts as a placeholder.
+        HStack {
+            Spacer()
+            VStack {
+                Spacer()
+                AsyncImage(url: URL(string: imageUrl), scale: 50) { phase in
+                    if let image = phase.image {
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .onAppear {
+                                setAverageColor(image: image)
+                            }
+                    } else if phase.error != nil {
+                        Color.gray // Indicates an error.
+                    } else {
+                        // Acts as a placeholder.
+                    }
                 }
+                .frame(width: width, height: height)
+                Spacer()
             }
-            .frame(width: 100, height: 100)
-            .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-            .background(backgroundColor)
-            .cornerRadius(12)
+            Spacer()
         }
+        .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
+        .background(backgroundColor)
+        .cornerRadius(12)
     }
     
     private func setAverageColor(image: Image) {

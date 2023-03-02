@@ -11,53 +11,60 @@ struct PokemonDetailView: View {
     @Binding var isShowingDetail: Bool
     @Binding var selectedResult: Results?
     @State var backgroundColor: Color = .clear
+    @State var imageSize:CGFloat = 200
     let animation: Namespace.ID
     
     @ObservedObject var viewModel = PokemonDetailViewModel()
     
     var body: some View {
-        VStack(alignment: .center) {
-            
-            HStack{
+        ZStack {
+            VStack {
+                HStack{
+                    Spacer()
+                }
+                .frame(height: 360)
+                .background(backgroundColor)
+                .cornerRadius(24)
+                
                 Spacer()
             }
-            .frame(height: 100)
-            .background(backgroundColor)
             
-            if let item = selectedResult {
-                HStack {
-                    Spacer()
-                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl()) { color in
+            
+            VStack(alignment: .center) {
+                if let item = selectedResult {
+                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), width: imageSize, height: imageSize) { color in
                         backgroundColor = color
                     }
-                        .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
-                        .onTapGesture {
-                            isShowingDetail = false
-                            selectedResult = nil
-                        }
-                        
-                    Spacer()
+                    .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
+                    .onTapGesture {
+                        isShowingDetail = false
+                        selectedResult = nil
+                    }
+                    .frame(width: imageSize, height: imageSize)
+                    .padding(EdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0))
+                    .onAppear {
+                        viewModel.getPokemonDetail(id: Int(item.getIndexString()) ?? 1)
+                    }
+                    
                 }
-                .onAppear {
-                    viewModel.getPokemonDetail(id: Int(item.getIndexString()) ?? 1)
-                }
+                
+//                Text(viewModel.result?.name ?? "")
+//                    .font(.system(size: 24, weight: .bold))
+//
+//                Text(String(viewModel.result?.height ?? 0))
+//                    .font(.system(size: 24, weight: .bold))
+//
+//                Text(String(viewModel.result?.weight ?? 0))
+//                    .font(.system(size: 24, weight: .bold))
+//
+//                Text(String(viewModel.result?.base_experience ?? 0))
+//                    .font(.system(size: 24, weight: .bold))
+                
+                Spacer()
             }
             
-            Text(viewModel.result?.name ?? "")
-                .font(.system(size: 24, weight: .bold))
-            
-            Text(String(viewModel.result?.height ?? 0))
-                .font(.system(size: 24, weight: .bold))
-            
-            Text(String(viewModel.result?.weight ?? 0))
-                .font(.system(size: 24, weight: .bold))
-            
-            Text(String(viewModel.result?.base_experience ?? 0))
-                .font(.system(size: 24, weight: .bold))
-            
-            Spacer()
         }
-        .background(Color.white)
+        .background(.white)
         .ignoresSafeArea()
     }
 }

@@ -21,7 +21,7 @@ struct PokemonListView: View {
     
     @Namespace private var animation
     
-    var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+    var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 16), count: 2)
     
     var body: some View {
         NavigationView {
@@ -54,7 +54,7 @@ struct PokemonListView: View {
                             }
                             return Text("")
                         }
-                        LazyVGrid(columns: columns, content: {
+                        LazyVGrid(columns: columns, spacing: 16, content: {
                             ForEach(viewModel.results, id: \.name) { result in
                                 PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl()) { color in
                                     
@@ -76,6 +76,7 @@ struct PokemonListView: View {
                                     )
                             }
                         })
+                        .padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
                     }
                     .background(
                         GeometryReader { proxy in
