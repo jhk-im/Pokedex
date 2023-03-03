@@ -12,6 +12,7 @@ struct PokemonDetailView: View {
     @Binding var selectedResult: Results?
     @State var backgroundColor: Color = .clear
     @State var imageSize:CGFloat = 200
+    @State var isShowingImage = false
     let animation: Namespace.ID
     
     @ObservedObject var viewModel = PokemonDetailViewModel()
@@ -24,7 +25,7 @@ struct PokemonDetailView: View {
                 }
                 .frame(height: 360)
                 .background(backgroundColor)
-                .cornerRadius(24)
+                .cornerRadius(24, corners: [.bottomLeft, .bottomRight])
                 
                 Spacer()
             }
@@ -32,19 +33,22 @@ struct PokemonDetailView: View {
             
             VStack(alignment: .center) {
                 if let item = selectedResult {
-                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), width: imageSize, height: imageSize) { color in
+                    PokemonListItem(name: item.name ?? "", imageUrl: item.getImageUrl(), isDetail: true, width: imageSize, height: imageSize) { color in
                         backgroundColor = color
                     }
                     .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
                     .onTapGesture {
+                        isShowingImage = false
                         isShowingDetail = false
                         selectedResult = nil
                     }
                     .frame(width: imageSize, height: imageSize)
                     .padding(EdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0))
                     .onAppear {
+                        isShowingImage = true
                         viewModel.getPokemonDetail(id: Int(item.getIndexString()) ?? 1)
                     }
+                    .show(isVisible: isShowingImage)
                     
                 }
                 
@@ -69,13 +73,29 @@ struct PokemonDetailView: View {
     }
 }
 
+struct RoundedCorner: Shape {
+
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
+    }
+}
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
 //struct PokemonDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        PokemonDetailView(
-//            isNavigationBarHidden: .constant(true),
-//            isShowingDetail: .constant(true),
-//            selectedResult: <#T##Binding<Results?>#>,
-//            animation: <#T##Namespace.ID#>
+//            PokemonDetailView(isShowingDetail: .constant(true),
+//            selectedResult: .constant(nil),
+//            animation: animation
 //        )
 //    }
 //}

@@ -11,7 +11,7 @@ import Palette
 struct PokemonListItem: View {
     var name: String
     var imageUrl: String
-    var isDetail = false
+    var isDetail: Bool
     @State var backgroundColor: Color = .clear
     @State var width: CGFloat = 120
     @State var height: CGFloat = 120
@@ -37,7 +37,11 @@ struct PokemonListItem: View {
                     }
                 }
                 .frame(width: width, height: height)
-                Spacer()
+                
+                Text(name)
+                    .foregroundColor(.gray)
+                    .font(.system(size: 14, weight: .medium))
+                    .show(isVisible: !isDetail)
             }
             Spacer()
         }
@@ -102,7 +106,7 @@ extension UIImage {
         var green: CGFloat = 0
         var blue: CGFloat = 0
         
-        print("bitmap -> \(bitmap)")
+        //print("bitmap -> \(bitmap)")
         
         let target: UInt8 = 10
         
@@ -126,7 +130,7 @@ extension UIImage {
 
 struct PokemonListItem_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonListItem(name: "bulbasaur", imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png") { color in
+        PokemonListItem(name: "bulbasaur", imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png", isDetail: false) { color in
             
         }
     }

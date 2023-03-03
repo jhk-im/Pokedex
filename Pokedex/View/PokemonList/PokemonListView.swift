@@ -56,7 +56,7 @@ struct PokemonListView: View {
                         }
                         LazyVGrid(columns: columns, spacing: 16, content: {
                             ForEach(viewModel.results, id: \.name) { result in
-                                PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl()) { color in
+                                PokemonListItem(name: result.name ?? "", imageUrl: result.getImageUrl(), isDetail: false) { color in
                                     
                                 }
                                     .matchedGeometryEffect(id: result.name, in: animation, isSource: true)
