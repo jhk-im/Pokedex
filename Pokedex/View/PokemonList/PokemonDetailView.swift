@@ -13,9 +13,50 @@ struct PokemonDetailView: View {
     @State var backgroundColor: Color = .clear
     @State var imageSize:CGFloat = 200
     @State var isShowingImage = false
+    @State var isShowingProgress = false
     let animation: Namespace.ID
     
     @ObservedObject var viewModel = PokemonDetailViewModel()
+    
+    @State private var gradient = LinearGradient(
+        gradient: Gradient(colors: [.red, .green, .blue]),
+        startPoint: .topLeading,
+        endPoint: .bottomTrailing
+    )
+    
+    func setProgressColor(name: String) -> Color {
+        switch name {
+        case "hp":
+            return .red
+        case "attack":
+            return .orange
+        case "defense":
+            return .yellow
+        case "special-attack":
+            return .green
+        case "special-defense":
+            return .mint
+        default:
+            return .teal
+        }
+    }
+    
+    func setProgressCaption(name: String) -> String {
+        switch name {
+        case "hp":
+            return "HP   "
+        case "attack":
+            return "ATK  "
+        case "defense":
+            return "DEF  "
+        case "special-attack":
+            return "S-ATK"
+        case "special-defense":
+            return "S-DEF"
+        default:
+            return "SPD  "
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -38,19 +79,39 @@ struct PokemonDetailView: View {
                     }
                     .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
                     .onTapGesture {
-                        isShowingImage = false
-                        isShowingDetail = false
-                        selectedResult = nil
+                        isShowingProgress = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            selectedResult = nil
+                            isShowingImage = false
+                            isShowingDetail = false
+                        }
                     }
                     .frame(width: imageSize, height: imageSize)
                     .padding(EdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0))
                     .onAppear {
-                        isShowingImage = true
                         viewModel.getPokemonDetail(id: Int(item.getIndexString()) ?? 1)
+                        isShowingImage = true
                     }
                     .show(isVisible: isShowingImage)
                     
                 }
+                
+                LazyVStack(spacing: 12, content: {
+                    ForEach(viewModel.result?.stats ?? [], id: \.stat?.name) { stats in
+                        ProgressView(value: Float(stats.base_stat ?? 0), total: 300)
+                            .progressViewStyle(PokemonProgressViewStyle(
+                                stroke: setProgressColor(name: stats.stat?.name ?? ""),
+                                fill: setProgressColor(name: stats.stat?.name ?? ""),
+                                caption: setProgressCaption(name: stats.stat?.name ?? "")
+                            ))
+                    }
+                })
+                .padding(EdgeInsets(top: 80, leading: 20, bottom: 0, trailing: 20))
+                .onAppear {
+                    isShowingProgress = true
+                }
+                .show(isVisible: isShowingProgress)
+                    
                 
 //                Text(viewModel.result?.name ?? "")
 //                    .font(.system(size: 24, weight: .bold))

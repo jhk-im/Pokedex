@@ -80,7 +80,7 @@ struct PokemonListView: View {
                     }
                     .background(
                         GeometryReader { proxy in
-                            Color.clear.onAppear {
+                            Color.white.onAppear {
                                 self.scrollViewHeight = -proxy.frame(in: .global).size.height
                                 //print("scrollViewHeight6 -> \(scrollViewHeight)")
                             }
