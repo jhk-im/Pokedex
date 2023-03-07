@@ -27,36 +27,69 @@ struct PokemonDetailView: View {
     func setProgressColor(name: String) -> Color {
         switch name {
         case "hp":
-            return .red
+            return Color("PastelRed")
         case "attack":
-            return .orange
+            return Color("PastelBlue")
         case "defense":
-            return .yellow
+            return Color("PastelYellow")
         case "special-attack":
-            return .green
+            return Color("PastelGreen")
         case "special-defense":
-            return .mint
+            return Color("PastelPurple")
         default:
-            return .teal
+            return Color("PastelPink")
         }
     }
     
     func setProgressCaption(name: String) -> String {
         switch name {
         case "hp":
-            return "HP   "
+            return "HP"
         case "attack":
-            return "ATK  "
+            return "ATK"
         case "defense":
-            return "DEF  "
+            return "DEF"
         case "special-attack":
             return "S-ATK"
         case "special-defense":
             return "S-DEF"
         default:
-            return "SPD  "
+            return "SPD"
         }
     }
+    
+    func setTypesColor(name: String) -> Color {
+        switch name {
+        case "normal":
+            return Color("TypeNormal")
+        case "ground":
+            return Color("TypeGround")
+        case "water":
+            return Color("TypeWater")
+        case "grass":
+            return Color("TypeGrass")
+        case "electric":
+            return Color("TypeElectric")
+        case "rock":
+            return Color("TypeRock")
+        case "ice":
+            return Color("TypeIce")
+        case "flying":
+            return Color("TypeFlying")
+        case "poison":
+            return Color("TypePoison")
+        case "bug":
+            return Color("TypeBug")
+        case "steel":
+            return Color("TypeSteel")
+        case "fire":
+            return Color("TypeFire")
+        default:
+            return Color("TypeDragon")
+        }
+    }
+    
+    // normal ,ground, water, grass, electric, rock, ice, flying, posion, bug, steel, fire, dragon
     
     var body: some View {
         ZStack {
@@ -64,7 +97,7 @@ struct PokemonDetailView: View {
                 HStack{
                     Spacer()
                 }
-                .frame(height: 360)
+                .frame(height: 380)
                 .background(backgroundColor)
                 .cornerRadius(24, corners: [.bottomLeft, .bottomRight])
                 
@@ -80,50 +113,58 @@ struct PokemonDetailView: View {
                     .matchedGeometryEffect(id: item.name, in: animation, isSource: true)
                     .onTapGesture {
                         isShowingProgress = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            selectedResult = nil
-                            isShowingImage = false
-                            isShowingDetail = false
-                        }
+                        selectedResult = nil
+                        isShowingImage = false
+                        isShowingDetail = false
                     }
                     .frame(width: imageSize, height: imageSize)
-                    .padding(EdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0))
+                    .padding(EdgeInsets(top: 80, leading: 0, bottom: 0, trailing: 0))
                     .onAppear {
                         viewModel.getPokemonDetail(id: Int(item.getIndexString()) ?? 1)
                         isShowingImage = true
                     }
                     .show(isVisible: isShowingImage)
                     
+                    Text(item.name ?? "")
+                        .foregroundColor(Color("PastelGray"))
+                        .font(.system(size: 24, weight: .heavy))
+                        .frame(maxHeight: 24)
+                        .show(isVisible: isShowingProgress)
+                    
+                    LazyHStack(alignment: .center, spacing: 12, content: {
+                        ForEach(viewModel.result?.types ?? [], id: \.type?.name) { types in
+                            ZStack(alignment: .center) {
+                                Text(types.type?.name ?? "")
+                                    .foregroundColor(Color("PastelWhite"))
+                                    .font(.caption)
+                                    .padding(EdgeInsets(top: 4, leading: 16, bottom: 6, trailing: 16))
+                                    .background(setTypesColor(name: types.type?.name ?? ""))
+                                    .cornerRadius(15)
+                            }
+                        }
+                    })
+                    .frame(maxHeight: 32)
+                    .show(isVisible: isShowingProgress)
                 }
                 
                 LazyVStack(spacing: 12, content: {
                     ForEach(viewModel.result?.stats ?? [], id: \.stat?.name) { stats in
-                        ProgressView(value: Float(stats.base_stat ?? 0), total: 300)
+                        ProgressView(value: Float(stats.base_stat ?? 0) + 50, total: 250)
                             .progressViewStyle(PokemonProgressViewStyle(
                                 stroke: setProgressColor(name: stats.stat?.name ?? ""),
                                 fill: setProgressColor(name: stats.stat?.name ?? ""),
-                                caption: setProgressCaption(name: stats.stat?.name ?? "")
+                                caption: setProgressCaption(name: stats.stat?.name ?? ""),
+                                value: stats.base_stat ?? 0
                             ))
                     }
                 })
-                .padding(EdgeInsets(top: 80, leading: 20, bottom: 0, trailing: 20))
+                .padding(EdgeInsets(top: 60, leading: 20, bottom: 0, trailing: 20))
                 .onAppear {
-                    isShowingProgress = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        isShowingProgress = true
+                    }
                 }
                 .show(isVisible: isShowingProgress)
-                    
-                
-//                Text(viewModel.result?.name ?? "")
-//                    .font(.system(size: 24, weight: .bold))
-//
-//                Text(String(viewModel.result?.height ?? 0))
-//                    .font(.system(size: 24, weight: .bold))
-//
-//                Text(String(viewModel.result?.weight ?? 0))
-//                    .font(.system(size: 24, weight: .bold))
-//
-//                Text(String(viewModel.result?.base_experience ?? 0))
-//                    .font(.system(size: 24, weight: .bold))
                 
                 Spacer()
             }

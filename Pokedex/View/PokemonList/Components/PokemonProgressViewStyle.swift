@@ -12,6 +12,7 @@ struct PokemonProgressViewStyle<Stroke: ShapeStyle, Background: ShapeStyle>: Pro
     var stroke: Stroke
     var fill: Background
     var caption: String = ""
+    var value: Int = 0
     var cornerRadius: CGFloat = 10
     var height: CGFloat = 20
     var animation: Animation = .easeInOut
@@ -25,12 +26,19 @@ struct PokemonProgressViewStyle<Stroke: ShapeStyle, Background: ShapeStyle>: Pro
                     Rectangle()
                         .fill(fill)
                         .frame(maxWidth: geo.size.width * CGFloat(fractionCompleted))
-                }
-                if !caption.isEmpty {
-                    Text("\(caption)")
+                    
+                    if !caption.isEmpty {
+                        Text(caption)
+                            .font(.caption)
+                            .foregroundColor(Color("PastelWhite"))
+                            .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 0))
+                    }
+                    
+                    Text("\(value)")
                         .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(EdgeInsets(top: 3, leading: 10, bottom: 0, trailing: 0))
+                        .foregroundColor(Color("PastelWhite"))
+                        .padding(EdgeInsets(top: 3, leading: 0, bottom: 0, trailing: 10))
+                        .frame(maxWidth: geo.size.width * CGFloat(fractionCompleted), alignment: .trailing)
                 }
             }
             .frame(height: height)

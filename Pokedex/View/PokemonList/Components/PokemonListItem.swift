@@ -39,7 +39,7 @@ struct PokemonListItem: View {
                 .frame(width: width, height: height)
                 
                 Text(name)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color("PastelGray"))
                     .font(.system(size: 14, weight: .medium))
                     .show(isVisible: !isDetail)
             }
