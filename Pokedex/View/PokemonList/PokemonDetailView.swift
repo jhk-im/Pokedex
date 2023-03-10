@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 struct PokemonDetailView: View {
     @Binding var isShowingDetail: Bool
@@ -23,6 +24,16 @@ struct PokemonDetailView: View {
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
+    
+    @State private var progressList: [String: Float] = [
+        "hp": 0.0,
+        "attack": 0.0,
+        "defense": 0.0,
+        "special-attack": 0.0,
+        "special-defense": 0.0,
+        "speed": 0.0,
+    ]
+    let timer = Timer.publish(every: 0.035, on: .main, in: .common).autoconnect()
     
     func setProgressColor(name: String) -> Color {
         switch name {
@@ -89,15 +100,13 @@ struct PokemonDetailView: View {
         }
     }
     
-    // normal ,ground, water, grass, electric, rock, ice, flying, posion, bug, steel, fire, dragon
-    
     var body: some View {
         ZStack {
             VStack {
                 HStack{
                     Spacer()
                 }
-                .frame(height: 380)
+                .frame(height: 440)
                 .background(backgroundColor)
                 .cornerRadius(24, corners: [.bottomLeft, .bottomRight])
                 
@@ -127,7 +136,7 @@ struct PokemonDetailView: View {
                     
                     Text(item.name ?? "")
                         .foregroundColor(Color("PastelGray"))
-                        .font(.system(size: 24, weight: .heavy))
+                        .font(.system(size: 32, weight: .heavy))
                         .frame(maxHeight: 24)
                         .show(isVisible: isShowingProgress)
                     
@@ -145,30 +154,67 @@ struct PokemonDetailView: View {
                     })
                     .frame(maxHeight: 32)
                     .show(isVisible: isShowingProgress)
-                }
-                
-                LazyVStack(spacing: 12, content: {
-                    ForEach(viewModel.result?.stats ?? [], id: \.stat?.name) { stats in
-                        ProgressView(value: Float(stats.base_stat ?? 0) + 50, total: 250)
-                            .progressViewStyle(PokemonProgressViewStyle(
-                                stroke: setProgressColor(name: stats.stat?.name ?? ""),
-                                fill: setProgressColor(name: stats.stat?.name ?? ""),
-                                caption: setProgressCaption(name: stats.stat?.name ?? ""),
-                                value: stats.base_stat ?? 0
-                            ))
+
+                    
+                    HStack(spacing: 24) {
+                        VStack(spacing: 4) {
+                            Text("weight")
+                                .foregroundColor(Color("PastelGray"))
+                                .font(.system(size: 12, weight: .regular))
+                            
+                            let weight = Float(viewModel.result?.weight ?? 0) * 0.1
+                            
+                            Text("\(String(format: "%.1f", weight)) KG")
+                                .foregroundColor(Color("PastelGray"))
+                                .font(.system(size: 18, weight: .bold))
+                        }
+                        VStack(spacing: 4) {
+                            Text("height")
+                                .foregroundColor(Color("PastelGray"))
+                                .font(.system(size: 12, weight: .regular))
+                            
+                            let height = Float(viewModel.result?.height ?? 0) * 0.1
+                            
+                            Text("\(String(format: "%.1f", height)) M")
+                                .foregroundColor(Color("PastelGray"))
+                                .font(.system(size: 18, weight: .bold))
+                        }
                     }
-                })
-                .padding(EdgeInsets(top: 60, leading: 20, bottom: 0, trailing: 20))
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        isShowingProgress = true
+                    .frame(height: 66)
+                    .show(isVisible: isShowingProgress)
+
+                    LazyVStack(spacing: 12, content: {
+                        let statList = viewModel.result?.stats ?? []
+                        ForEach(statList, id: \.stat?.name) { stats in
+                            ProgressView(value: progressList[stats.stat?.name ?? ""], total: 250)
+                                .progressViewStyle(PokemonProgressViewStyle(
+                                    stroke: setProgressColor(name: stats.stat?.name ?? ""),
+                                    fill: setProgressColor(name: stats.stat?.name ?? ""),
+                                    caption: setProgressCaption(name: stats.stat?.name ?? ""),
+                                    value: stats.base_stat ?? 0
+                                ))
+                                .onReceive(timer) { _ in
+                                    guard let progress = progressList[stats.stat?.name ?? ""] else {
+                                        return
+                                    }
+                                    let stat = Float(stats.base_stat ?? 0) + 50
+                                    
+                                    if progress < stat {
+                                        progressList[stats.stat?.name ?? ""]! += 5
+                                    }
+                                }
+                        }
+                    })
+                    .padding(EdgeInsets(top: 32, leading: 20, bottom: 0, trailing: 20))
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            isShowingProgress = true
+                        }
                     }
+                    .show(isVisible: isShowingProgress)
                 }
-                .show(isVisible: isShowingProgress)
-                
                 Spacer()
             }
-            
         }
         .background(.white)
         .ignoresSafeArea()
@@ -189,6 +235,12 @@ struct RoundedCorner: Shape {
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+extension Array where Element: Equatable {
+    func whatFunction(_ value :  Element) -> [Int] {
+        return self.indices.filter {self[$0] == value}
     }
 }
 
